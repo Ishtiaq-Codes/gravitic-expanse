@@ -65,7 +65,7 @@ else:
 
 # ─── Static Files (WhiteNoise handles serving + compression) ─────────────────
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ─── CSRF / Trusted Origins ───────────────────────────────────────────────────
 # Add your EC2 IP and domain here so forms (login, cart, checkout) work
