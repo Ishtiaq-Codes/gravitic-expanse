@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-10">
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-8">
+        <div class="w-12 h-12 bg-[#ffb700]/10 rounded-xl flex items-center justify-center shimmer-border">
+            <i class="fas fa-box-open text-[#ffb700] text-lg"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold font-display gold-gradient-text">My Orders</h1>
+            <p class="text-sm text-gray-500">Orders placed on this device</p>
+        </div>
+    </div>
+
+    <!-- Loading spinner (shown while JS decides what to do) -->
+    <div id="loading-state" class="text-center py-16">
+        <div class="w-12 h-12 border-4 border-[#ffb700]/20 border-t-[#ffb700] rounded-full animate-spin mx-auto mb-4">
+        </div>
+        <p class="text-gray-500 text-sm">Loading your orders...</p>
+    </div>
+
+    <!-- Empty: no orders saved on this device at all -->
+    <div id="no-orders-msg" class="hidden">
+        <div class="luxury-card rounded-2xl p-12 text-center shimmer-border">
+            <div class="w-20 h-20 bg-[#ffb700]/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-shopping-bag text-3xl text-[#ffb700]/50"></i>
+            </div>
+            <h2 class="text-xl font-semibold text-slate-600 mb-2">No orders yet</h2>
+            <p class="text-gray-500 text-sm mb-6">You haven't placed any orders on this device yet.</p>
+            <a href="{% url 'product_list' %}" class="glow-btn px-8 py-3 rounded-full text-sm">
+                <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+            </a>
+        </div>
+    </div>
+
+    {% if orders %}
+    <!-- Orders list (shown when ?ids= was passed and Django found them) -->
+    <div class="space-y-6" id="orders-list">
+        {% for order in orders %}
+        <div class="luxury-card rounded-2xl overflow-hidden animate-fade-in">
+            <!-- Order header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-slate-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#ffb700]/10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-receipt text-[#ffb700] text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-100">Order #{{ order.id }}</p>
+                        <p class="text-xs text-gray-500">{{ order.ordered_at|date:"d M Y, g:i A" }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full border
+                        {% if order.status == 'pending' %}bg-white-900/30 text-yellow-400 border-yellow-500/30
+                        {% elif order.status == 'processing' %}bg-white-900/30 text-blue-400 border-blue-500/30
+                        {% elif order.status == 'completed' %}bg-white-900/30 text-green-400 border-green-500/30
+                        {% else %}bg-white-900/30 text-red-400 border-red-500/30{% endif %}">
+                        <i class="fas fa-circle text-[0.4rem] mr-1 align-middle"></i>
+                        {{ order.get_status_display }}
+                    </span>
+                    <span class="text-sm font-bold gold-gradient-text">Rs. {{ order.total_price|intcomma }}</span>
+                </div>
+            </div>
+
+            <!-- Order items -->
+            <div class="p-5 space-y-3">
+                {% for item in order.items.all %}
+                <div class="flex items-center gap-3">
+                    {% if item.product and item.product.image %}
+                    <img src="{{ item.product.image.url }}"
+                        class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0">
+                    {% else %}
+                    <div
+                        class="w-14 h-14 bg-slate-100 rounded-xl flex items-center justify-center border border-slate-200 flex-shrink-0">
+                        <i class="fas fa-image text-slate-400"></i>
+                    </div>
+                    {% endif %}
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-slate-700 text-sm truncate">
+                            {{ item.product.name|default:"Product" }}
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            Qty: {{ item.quantity }} &times; Rs. {{ item.price|intcomma }}
+                        </p>
+                        {% if item.suite_code %}
+                        <p class="text-xs text-[#ffb700]/70 mt-0.5"><i class="fas fa-tag mr-1"></i>{{ item.suite_code }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <span class="font-semibold text-slate-600 text-sm flex-shrink-0">
+                        Rs. {{ item.get_total|intcomma }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Footer -->
+            <div
+                class="border-t border-slate-200 px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50">
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-user mr-1"></i>{{ order.name }}
+                    &bull; <i class="fas fa-phone ml-2 mr-1"></i>{{ order.phone }}
+                    &bull; <i class="fas fa-map-marker-alt ml-2 mr-1"></i>{{ order.city }}
+                </div>
+                <div class="text-xs text-slate-400 capitalize">
+                    <i class="fas fa-credit-card mr-1"></i>{{ order.get_payment_method_display }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Clear orders button -->
+    <div class="text-center mt-8">
+        <button onclick="clearMyOrders()"
+            class="text-sm text-gray-500 hover:text-red-400 transition border border-slate-200 hover:border-red-500/30 px-5 py-2 rounded-full">
+            <i class="fas fa-trash-alt mr-2"></i>Clear order history from this device
+        </button>
+    </div>
+
+    {% else %}
+    <!-- No orders matched these IDs in the DB -->
+    <div id="orders-server-empty" class="hidden luxury-card rounded-2xl p-12 text-center shimmer-border">
+        <div class="w-20 h-20 bg-[#ffb700]/10 rounded-full flex items-center justify-center mx-auto mb-5">
+            <i class="fas fa-search text-3xl text-[#ffb700]/50"></i>
+        </div>
+        <h2 class="text-xl font-semibold text-slate-600 mb-2">Orders not found</h2>
+        <p class="text-gray-500 text-sm mb-6">We couldn't find your orders. They may have been removed.</p>
+        <a href="{% url 'product_list' %}" class="glow-btn px-8 py-3 rounded-full text-sm">
+            <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    (function () {
+        var params = new URLSearchParams(window.location.search);
+        var loader = document.getElementById('loading-state');
+        var noOrders = document.getElementById('no-orders-msg');
+        var ordersList = document.getElementById('orders-list');
+        var serverEmpty = document.getElementById('orders-server-empty');
+
+        if (params.has('ids')) {
+            // Page was loaded with ?ids= — hide loader, show whatever rendered
+            if (loader) loader.classList.add('hidden');
+            if (ordersList) {
+                // Orders were found by Django — keep visible
+                ordersList.classList.remove('hidden');
+            } else if (serverEmpty) {
+                // Django found nothing for those IDs
+                serverEmpty.classList.remove('hidden');
+            }
+        } else {
+            // No ?ids= in URL — read localStorage and redirect
+            var savedIds = JSON.parse(localStorage.getItem('my_order_ids') || '[]');
+            if (savedIds.length === 0) {
+                // Nothing saved on this device
+                if (loader) loader.classList.add('hidden');
+                if (noOrders) noOrders.classList.remove('hidden');
+            } else {
+                // Redirect with the saved IDs
+                window.location.replace('{% url "my_orders" %}?ids=' + savedIds.join(','));
+            }
+        }
+    })();
+
+    function clearMyOrders() {
+        if (confirm('Remove all order history from this device?')) {
+            localStorage.removeItem('my_order_ids');
+            window.location.href = '{% url "my_orders" %}';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,554 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kamalia Khaddar{% endblock %} | Premium Fabrics & Suits</title>
+    <meta name="description"
+        content="{% block meta_description %}Shop premium Kamalia Khaddar suits, fabrics, cotton, silk and more. Authentic handcrafted textiles delivered to your doorstep.{% endblock %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fffaf5',
+                            100: '#fff2e6',
+                            200: '#ffe0b8',
+                            300: '#ffd18a',
+                            400: '#ffc35c',
+                            500: '#ffb700',
+                            600: '#e6a200',
+                            700: '#b37f00',
+                            800: '#805c00',
+                            900: '#4d3800',
+                            950: '#1a1a00',
+                        },
+                        grey: {
+                            DEFAULT: '#0d0d0d',
+                            50: '#1a1a1a',
+                            100: '#0f0f0f'
+                        },
+                        gray: {
+                            50: '#f8f8f8',
+                            100: '#eaeaea',
+                            200: '#cccccc',
+                            300: '#aaaaaa',
+                            400: '#888888',
+                            500: '#666666',
+                            600: '#444444',
+                            700: '#333333',
+                            800: '#222222',
+                            900: '#111111',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        display: ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function addToCart(productId, btn) {
+        const csrftoken = getCookie('csrftoken');
+
+        fetch(`/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                quantity: document.querySelector(`#qty-${productId}`)?.value || 1
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error adding to cart");
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Added to cart successfully!");
+            })
+            .catch(error => {
+                alert("Error adding to cart");
+                console.error(error);
+            });
+    }
+</script>
+
+
+<body class="bg-[#F8F9FA] text-slate-800 min-h-screen flex flex-col">
+
+    <form style="display:none;">
+        {% csrf_token %}
+    </form>
+
+    <!-- Top Bar -->
+    <div
+        class="bg-gradient-to-r from-[#0a0a0a] via-[#1a1a0a] to-[#0a0a0a] text-[#c9a84c] text-xs py-2.5 border-b border-[rgba(255,183,0,0.1)]">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <span class="flex items-center gap-1"><i class="fas fa-gem mr-1 text-[#ffb700]"></i> Free home delivery
+            </span>
+            <div class="hidden sm:flex items-center gap-4">
+                <a href="tel:+923001234567" class="hover:text-[#ffd700] transition"><i class="fas fa-phone mr-1"></i>
+                    +92
+                    336 0618981</a>
+                <a href="mailto:info@kamaliakhaddar.pk" class="hover:text-[#ffd700] transition"><i
+                        class="fas fa-envelope mr-1"></i> info@kamaliakhaddark.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-[#0d0d0d]/95 backdrop-blur-xl shadow-[0_2px_20px_rgba(0,0,0,0.5)] sticky top-0 z-50 border-b border-[rgba(255,183,0,0.08)]"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center gap-2 flex-shrink-0 group">
+                    <img src="{% static 'images/new.png' %}" alt="Kamalia Khaddar Logo"
+                        class="h-16 w-16 rounded-full logo-ring object-cover">
+                    <div>
+                        <span class="text-xl font-bold font-display gold-shimmer">Kamalia</span>
+                        <span class="text-xs block text-[#b37f00] -mt-1 tracking-[0.2em] uppercase">Khaddar</span>
+                    </div>
+                </a>
+                <!-- Search bar (desktop) -->
+                <form action="{% url 'product_list' %}" method="GET" class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" name="q" placeholder="Search premium products..."
+                            value="{{ search_query|default:'' }}"
+                            class="w-full pl-10 pr-4 py-2.5 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-[#ffb700]/30 focus:border-[#ffb700]/50 transition text-sm">
+                        <i class="fas fa-search absolute left-3.5 top-3 text-[#b37f00]"></i>
+                    </div>
+                </form>
+
+                <!-- Right side -->
+                <div class="flex items-center gap-3">
+                    <!-- Auth links (desktop) -->
+                    <div class="hidden md:flex items-center gap-2 text-sm">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="text-gray-300 hover:text-[#ffb700] transition px-3 py-2">
+                            <i class="fas fa-user mr-1"></i> {{ user.first_name|default:user.username }}
+                        </a>
+                        <a href="{% url 'logout' %}"
+                            class="text-gray-300 hover:text-red-400 transition px-3 py-2">Logout</a>
+                        {% else %}
+                        <a href="{% url 'login' %}"
+                            class="text-gray-300 hover:text-[#ffb700] transition px-3 py-2">Login</a>
+                        <a href="{% url 'register' %}" class="glow-btn px-4 py-2 rounded-full text-sm font-medium">Sign
+                            Up</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- My Orders button (always visible, guest-friendly) -->
+                    <button onclick="goToMyOrders()" title="My Orders"
+                        class="relative p-2 text-gray-300 hover:text-[#ffb700] transition group" id="my-orders-nav-btn">
+                        <i class="fas fa-box-open text-xl group-hover:drop-shadow-[0_0_8px_rgba(255,183,0,0.5)]"></i>
+                        <span id="my-orders-count"
+                            class="absolute -top-1 -right-1 gold-badge text-xs w-5 h-5 rounded-full items-center justify-center font-bold hidden flex"></span>
+                    </button>
+
+                    <!-- Cart -->
+                    <a href="{% url 'cart_detail' %}"
+                        class="relative p-2 text-gray-300 hover:text-[#ffb700] transition group" id="cart-icon">
+                        <i
+                            class="fas fa-shopping-bag text-xl group-hover:drop-shadow-[0_0_8px_rgba(255,183,0,0.5)]"></i>
+                        <span id="cart-count"
+                            class="absolute -top-1 -right-1 gold-badge text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold {% if cart|length == 0 %}hidden{% endif %}">
+                            {{ cart|length }}
+                        </span>
+                    </a>
+
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-400 hover:text-[#ffb700]">
+                        <i class="fas fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category nav (desktop) -->
+            <div class="hidden md:flex items-center gap-1 pb-2 overflow-x-auto">
+                <a href="{% url 'product_list' %}"
+                    class="px-3 py-1.5 text-sm text-gray-300 hover:text-[#ffb700] hover:bg-[#ffb700]/5 rounded-full transition whitespace-nowrap font-medium">All
+                    Products</a>
+                {% for code, name in categories %}
+                <a href="{% url 'product_list' %}?category={{ code }}"
+                    class="px-3 py-1.5 text-sm text-gray-400 hover:text-[#ffb700] hover:bg-[#ffb700]/5 rounded-full transition whitespace-nowrap">
+                    {{ name }}</a>
+                {% empty %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden bg-[#0d0d0d] border-t border-[rgba(255,183,0,0.1)]" id="mobile-menu">
+            <!-- Mobile search -->
+            <form action="{% url 'product_list' %}" method="GET" class="p-4">
+                <div class="relative">
+                    <input type="text" name="q" placeholder="Search products..."
+                        class="w-full pl-10 pr-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-[#ffb700]/30 text-sm">
+                    <i class="fas fa-search absolute left-3.5 top-3.5 text-[#b37f00]"></i>
+                </div>
+            </form>
+            <div class="px-4 pb-2">
+                <a href="{% url 'product_list' %}"
+                    class="block px-3 py-2.5 text-gray-300 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg font-medium transition">All
+                    Products</a>
+                {% for code, name in categories %}
+                <a href="{% url 'product_list' %}?category={{ code }}"
+                    class="block px-3 py-2.5 text-gray-400 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition">
+                    {{ name }}</a>
+                {% endfor %}
+                <hr class="my-2 border-[#2a2a2a]">
+                {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}"
+                    class="block px-3 py-2.5 text-gray-300 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition"><i
+                        class="fas fa-user mr-2"></i>Profile</a>
+                <a href="{% url 'logout' %}"
+                    class="block px-3 py-2.5 text-red-400 hover:bg-red-500/10 rounded-lg transition"><i
+                        class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}"
+                    class="block px-3 py-2.5 text-gray-300 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition"><i
+                        class="fas fa-sign-in-alt mr-2"></i>Login</a>
+                <a href="{% url 'register' %}"
+                    class="block px-3 py-2.5 text-[#ffb700] hover:bg-[#ffb700]/10 rounded-lg transition"><i
+                        class="fas fa-user-plus mr-2"></i>Sign Up</a>
+                {% endif %}
+                <!-- My Orders mobile link -->
+                <button onclick="goToMyOrders()"
+                    class="w-full text-left block px-3 py-2.5 text-gray-300 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition">
+                    <i class="fas fa-box-open mr-2"></i>My Orders
+                </button>
+                <hr class="my-2 border-[#2a2a2a]">
+                <a href="{% url 'about' %}"
+                    class="block px-3 py-2.5 text-gray-400 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition">About
+                    Us</a>
+                <a href="{% url 'contact' %}"
+                    class="block px-3 py-2.5 text-gray-400 hover:bg-[#ffb700]/10 hover:text-[#ffb700] rounded-lg transition">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages / Toasts -->
+    {% if messages %}
+    <div class="fixed top-20 right-4 z-[100] space-y-2" id="toast-container">
+        {% for message in messages %}
+        <div
+            class="toast flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl text-sm font-medium border
+            {% if message.tags == 'success' %}bg-[#1a1a0a] text-[#ffb700] border-[#ffb700]/30{% elif message.tags == 'error' %}bg-red-950 text-red-300 border-red-500/30{% elif message.tags == 'warning' %}bg-yellow-950 text-yellow-300 border-yellow-500/30{% else %}bg-blue-950 text-blue-300 border-blue-500/30{% endif %}">
+            <i
+                class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>setTimeout(() => { const tc = document.getElementById('toast-container'); if (tc) tc.remove(); }, 3000);</script>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#080808] text-gray-400 mt-16 border-t border-[rgba(255,183,0,0.08)]">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="{% static 'images/new.png' %}" alt="Kamalia Khaddar Logo"
+                            class="h-12 w-12 rounded-full object-cover logo-ring">
+                        <span class="text-xl font-bold font-display gold-shimmer">Kamalia Khaddar</span>
+                    </div>
+                    <p class="text-sm text-gray-500 leading-relaxed">Premium handcrafted fabrics & suits from the heart
+                        of Kamalia. Authentic Khaddar, Cotton, Silk & more since 1985.</p>
+                    <div class="flex gap-3 mt-4">
+                        <a href="https://www.facebook.com/kamaliaKhaddarK/"
+                            class="social-icon w-9 h-9 rounded-full flex items-center justify-center text-gray-400"><i
+                                class="fab fa-facebook-f text-sm"></i></a>
+                        <a href="https://www.instagram.com/kamaliakhaddark/"
+                            class="social-icon w-9 h-9 rounded-full flex items-center justify-center text-gray-400"><i
+                                class="fab fa-instagram text-sm"></i></a>
+                        <a href="https://api.whatsapp.com/send/?phone=923360618981&text&type=phone_number&app_absent=0"
+                            class="social-icon w-9 h-9 rounded-full flex items-center justify-center text-gray-400"><i
+                                class="fab fa-whatsapp text-sm"></i></a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-[#ffb700] font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'home' %}" class="gold-underline">Home</a></li>
+                        <li><a href="{% url 'product_list' %}" class="gold-underline">Shop All</a></li>
+                        <li><a href="{% url 'about' %}" class="gold-underline">About Us</a></li>
+                        <li><a href="{% url 'contact' %}" class="gold-underline">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Categories -->
+                <div>
+                    <h4 class="text-[#ffb700] font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'product_list' %}?category=winter" class="gold-underline">Winter
+                                Collection</a></li>
+                        <li><a href="{% url 'product_list' %}?category=summer" class="gold-underline">Summer
+                                Collection</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-[#ffb700] font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fas fa-map-marker-alt mt-1 text-[#ffb700]"></i>Main
+                            khaddar market Kalma Chowk Kamalia,
+                            Pakistan</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-phone text-[#ffb700]"></i>+92 3360618981
+                        </li>
+                        <li class="flex items-center gap-2"><i
+                                class="fas fa-envelope text-[#ffb700]"></i>info@kamaliakhaddark.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="gold-divider mt-10 mb-6"></div>
+            <div class="text-center text-sm text-gray-600">
+                &copy; 2026 Kamalia Khaddar. All rights reserved. Handcrafted with <i
+                    class="fas fa-heart text-[#ffb700]"></i> in Pakistan.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            menu.classList.toggle('hidden');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        }
+
+        function addToCart(productId, btn) {
+            if (btn.disabled) return;
+
+            const qtyInput = document.getElementById('qty-' + productId) || document.querySelector('input[name="quantity"]');
+            const quantity = qtyInput ? qtyInput.value : 1;
+            const originalHtml = btn.innerHTML;
+
+            btn.innerHTML = '<span class="spinner"></span>';
+            btn.disabled = true;
+
+            const resetBtn = () => {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                btn.classList.remove('bg-green-600');
+            };
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `quantity=${quantity}`
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const count = document.getElementById('cart-count');
+                        if (count) {
+                            count.textContent = data.cart_count;
+                            count.classList.remove('hidden');
+                        }
+                        btn.innerHTML = '<i class="fas fa-check mr-1"></i> Added!';
+                        btn.classList.add('bg-green-600');
+                        showToast(data.message, 'success');
+                        setTimeout(resetBtn, 2000);
+                    } else {
+                        showToast(data.message || 'Error adding to cart', 'error');
+                        resetBtn();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Error adding to cart', 'error');
+                    resetBtn();
+                });
+        }
+
+        function showToast(message, type) {
+            const colors = { success: 'bg-[#1a1a0a] text-[#ffb700] border border-[#ffb700]/30', error: 'bg-red-950 text-red-300 border border-red-500/30', info: 'bg-blue-950 text-blue-300 border border-blue-500/30' };
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            const div = document.createElement('div');
+            div.className = `toast flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl text-sm font-medium ${colors[type] || colors.info}`;
+            div.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed top-20 right-4 z-[100] space-y-2';
+                document.body.appendChild(container);
+            }
+            container.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function shopNow(productId, btn) {
+            if (btn.disabled) return;
+            const qtyInput = document.getElementById('qty-' + productId) || document.querySelector('input[name="quantity"]');
+            const quantity = qtyInput ? qtyInput.value : 1;
+            const originalHtml = btn.innerHTML;
+
+            btn.innerHTML = '<span class="spinner"></span>';
+            btn.disabled = true;
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `quantity=${quantity}`
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const count = document.getElementById('cart-count');
+                        if (count) {
+                            count.textContent = data.cart_count;
+                            count.classList.remove('hidden');
+                        }
+                        window.location.href = '/orders/checkout/';
+                    } else {
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                        showToast(data.message || 'Error adding to cart', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                    showToast('Error adding to cart', 'error');
+                });
+        }
+
+        function goToMyOrders() {
+            var ids = JSON.parse(localStorage.getItem('my_order_ids') || '[]');
+            var url = '/orders/my-orders/';
+            if (ids.length > 0) {
+                url += '?ids=' + ids.join(',');
+            }
+            window.location.href = url;
+        }
+
+        // Update My Orders badge count from localStorage
+        (function () {
+            var ids = JSON.parse(localStorage.getItem('my_order_ids') || '[]');
+            var badge = document.getElementById('my-orders-count');
+            if (badge && ids.length > 0) {
+                badge.textContent = ids.length;
+                badge.classList.remove('hidden');
+            }
+        })();
+    </script>
+    <script>
+        // Fix bfcache (back button) stuck spinner: reset all disabled buttons on page restore
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                document.querySelectorAll('button[disabled]').forEach(function (btn) {
+                    btn.disabled = false;
+                    // Restore original icon based on button context
+                    if (btn.innerHTML.includes('spinner')) {
+                        if (btn.onclick && btn.onclick.toString().includes('shopNow')) {
+                            btn.innerHTML = '<i class="fas fa-bolt mr-1"></i>Shop Now';
+                        } else {
+                            btn.innerHTML = '<i class="fas fa-shopping-bag mr-1"></i>Add to Cart';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

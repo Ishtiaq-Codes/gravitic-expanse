@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="relative bg-gradient-to-br from-slate-100 to-white py-16 overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#ffb700]/40 to-transparent">
+    </div>
+    <div
+        class="absolute top-0 left-0 w-[300px] h-[300px] bg-[radial-gradient(circle,rgba(255,183,0,0.08)_0%,transparent_70%)] rounded-full -translate-x-1/3 -translate-y-1/3">
+    </div>
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold font-display gold-gradient-text mb-3">Contact Us</h1>
+        <p class="text-slate-500">We'd love to hear from you. Get in touch with us anytime.</p>
+    </div>
+</section>
+
+<div class="max-w-5xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- Contact Form -->
+        <div>
+            <h2 class="text-2xl font-bold text-slate-700 mb-6">Send us a Message</h2>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Your Name</label>
+                    <input type="text" class="w-full px-4 py-3 rounded-lg" placeholder="Full Name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                    <input type="email" class="w-full px-4 py-3 rounded-lg" placeholder="your@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Phone</label>
+                    <input type="tel" class="w-full px-4 py-3 rounded-lg" placeholder="Your phone number">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Message</label>
+                    <textarea rows="5" class="w-full px-4 py-3 rounded-lg"
+                        placeholder="How can we help you?"></textarea>
+                </div>
+                <button type="submit" class="glow-btn px-8 py-3.5 rounded-xl text-base">
+                    <i class="fas fa-paper-plane mr-2"></i>Send Message
+                </button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+            <h2 class="text-2xl font-bold text-slate-700 mb-6">Get in Touch</h2>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4 p-4 luxury-card rounded-xl group">
+                    <div
+                        class="w-12 h-12 bg-[#ffb700]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#ffb700]/20 transition">
+                        <i class="fas fa-map-marker-alt text-[#ffb700]"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700">Address</h3>
+                        <p class="text-gray-500 text-sm">Main Khaddar Market<br>Kalma Chowk , Kamalia,
+                            Punjab<br>Pakistan</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 luxury-card rounded-xl group">
+                    <div
+                        class="w-12 h-12 bg-[#ffb700]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#ffb700]/20 transition">
+                        <i class="fas fa-phone text-[#ffb700]"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700">Phone</h3>
+                        <p class="text-gray-500 text-sm">+92 336 0618981</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 luxury-card rounded-xl group">
+                    <div
+                        class="w-12 h-12 bg-[#ffb700]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#ffb700]/20 transition">
+                        <i class="fas fa-envelope text-[#ffb700]"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700">Email</h3>
+                        <p class="text-gray-500 text-sm"><br>info@kamaliakhaddrk.com</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 luxury-card rounded-xl group">
+                    <div
+                        class="w-12 h-12 bg-[#ffb700]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#ffb700]/20 transition">
+                        <i class="fas fa-clock text-[#ffb700]"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-700">Business Hours</h3>
+                        <p class="text-gray-500 text-sm">24 – Hours</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-slate-100 to-white overflow-hidden">
+    <!-- Animated background orbs -->
+    <div class="absolute inset-0">
+        <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,183,0,0.12)_0%,transparent_70%)] rounded-full -translate-x-1/3 -translate-y-1/3"
+            style="animation: heroFloat1 12s ease-in-out infinite;"></div>
+        <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(255,183,0,0.09)_0%,transparent_70%)] rounded-full translate-x-1/4 translate-y-1/4"
+            style="animation: heroFloat2 15s ease-in-out infinite;"></div>
+        <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-[radial-gradient(circle,rgba(179,127,0,0.07)_0%,transparent_70%)] rounded-full -translate-x-1/2 -translate-y-1/2"
+            style="animation: heroFloat1 18s ease-in-out infinite reverse;"></div>
+    </div>
+    <!-- Gold line accents -->
+    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#ffb700]/40 to-transparent">
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 py-24 md:py-36">
+        <div class="max-w-2xl">
+            <span
+                class="inline-block px-5 py-2 bg-[#ffb700]/10 backdrop-blur-sm rounded-full text-sm font-medium text-[#b37f00] mb-6 border border-[#ffb700]/30 shimmer-border">
+                <i class="fas fa-gem mr-1"></i> New Collection 2026
+            </span>
+            <h1 class="text-4xl md:text-6xl font-bold font-display leading-tight mb-6 text-slate-900">
+                Premium <span class="gold-shimmer">Kamalia</span><br>Khaddar Collection
+            </h1>
+            <p class="text-lg text-slate-500 mb-8 leading-relaxed">
+                Discover authentic handcrafted Khaddar suits &amp; fabrics made with traditional techniques passed down
+                through generations. Premium quality, timeless elegance.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="{% url 'product_list' %}" class="glow-btn px-8 py-3.5 rounded-full text-base">
+                    <i class="fas fa-shopping-bag mr-2"></i>Shop Now
+                </a>
+                <a href="{% url 'product_list' %}?category=summer"
+                    class="glow-btn-outline px-8 py-3.5 rounded-full font-semibold">
+                    View Summer Collection <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Stats -->
+    <div class="relative">
+        <div class="gold-divider"></div>
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-2xl font-bold gold-gradient-text">500+</div>
+                    <div class="text-sm text-slate-500">Products</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold gold-gradient-text">10K+</div>
+                    <div class="text-sm text-slate-500">Happy Customers</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold gold-gradient-text">38+</div>
+                    <div class="text-sm text-slate-500">Years Legacy</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold gold-gradient-text">100%</div>
+                    <div class="text-sm text-slate-500">Authentic</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold font-display gold-gradient-text">Shop by Category</h2>
+        <p class="text-slate-500 mt-2">Find the perfect fabric for every occasion</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for code, name in categories %}
+        <a href="{% url 'product_list' %}?category={{ code }}"
+            class="group relative luxury-card rounded-none p-6 text-center hover:-translate-y-1 shimmer-border">
+            <div
+                class="w-14 h-14 bg-[#ffb700]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#ffb700] transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(255,183,0,0.3)]">
+                <i
+                    class="fas fa-{% if code == 'winter' %}snowflake{% elif code == 'summer' %}sun{% else %}vest{% endif %} text-xl text-[#ffb700] group-hover:text-[#0a0a0a] transition"></i>
+            </div>
+            <h3 class="font-semibold text-slate-700 group-hover:text-[#ffb700] transition">{{ name }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-3xl font-bold font-display gold-gradient-text">Featured Products</h2>
+                <p class="text-slate-500 mt-1">Handpicked premium selections</p>
+            </div>
+            <a href="{% url 'product_list' %}"
+                class="hidden md:flex items-center gap-2 text-[#ffb700] hover:text-[#ffd700] font-medium transition">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {% for product in featured_products %}
+            <div class="group luxury-card rounded-none overflow-hidden animate-fade-in flex flex-col h-full">
+                <a href="{{ product.get_absolute_url }}"
+                    class="block relative aspect-[4/5] md:aspect-[4/3] overflow-hidden bg-slate-100 product-img-wrap">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                        class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-slate-300">
+                        <i class="fas fa-image text-4xl"></i>
+                    </div>
+                    {% endif %}
+                    {% if product.discount_percentage > 0 %}
+                    <span
+                        class="absolute top-3 left-3 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full discount-badge shadow-lg">
+                        -{{ product.discount_percentage }}%
+                    </span>
+                    {% endif %}
+                    {% if product.featured %}
+                    <span class="absolute top-3 right-3 gold-badge text-xs font-bold px-2.5 py-1 rounded-full">
+                        <i class="fas fa-star"></i>
+                    </span>
+                    {% endif %}
+                </a>
+                <div class="p-2 md:p-4 flex flex-col flex-grow">
+                    <a href="{{ product.get_absolute_url }}" class="block">
+                        <p
+                            class="text-[10px] md:text-xs text-[#b37f00] font-medium uppercase tracking-wide mb-0.5 md:mb-1">
+                            {{ product.get_category_display }}
+                        </p>
+                        <h3
+                            class="text-[11px] md:text-sm font-normal text-slate-700 line-clamp-2 group-hover:text-[#ffb700] transition mb-1 md:mb-2">
+                            {{ product.name }}
+                        </h3>
+                    </a>
+                    <div class="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
+                        {% if product.discount_price %}
+                        <span class="text-sm md:text-lg font-bold gold-gradient-text">
+                            Rs. {{ product.discount_price|intcomma }}
+                        </span>
+                        <span class="text-[10px] md:text-sm text-slate-400 line-through">
+                            Rs. {{ product.price|intcomma }}
+                        </span>
+                        {% else %}
+                        <span class="text-sm md:text-lg font-bold gold-gradient-text">
+                            Rs. {{ product.price|intcomma }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="flex gap-1 md:gap-2 mt-auto">
+                        <button data-product-id="{{ product.id }}" onclick="addToCart(this.dataset.productId, this)"
+                            class="glow-btn flex-1 py-1 md:py-2.5 text-[9px] md:text-sm rounded-lg md:rounded-xl min-w-0 whitespace-nowrap">
+                            <i class="fas fa-shopping-bag mr-0.5 md:mr-1"></i>Add to Cart
+                        </button>
+                        <a href="{{ product.get_absolute_url }}"
+                            class="flex-1 flex items-center justify-center py-1 md:py-2.5 text-[9px] md:text-sm rounded-lg md:rounded-xl font-semibold bg-black text-white hover:bg-gray-800 active:bg-gray-900 transition-colors duration-200 min-w-0 text-center whitespace-nowrap">
+                            <i class="fas fa-bolt mr-0.5 md:mr-1"></i>Shop Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Latest Products -->
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="flex items-center justify-between mb-10">
+        <div>
+            <h2 class="text-3xl font-bold font-display gold-gradient-text">New Arrivals</h2>
+            <p class="text-slate-500 mt-1">Fresh additions to our collection</p>
+        </div>
+        <a href="{% url 'product_list' %}?sort=newest"
+            class="hidden md:flex items-center gap-2 text-[#ffb700] hover:text-[#ffd700] font-medium transition">
+            View All <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        {% for product in latest_products %}
+        <div class="group luxury-card rounded-none overflow-hidden animate-fade-in flex flex-col h-full">
+            <a href="{{ product.get_absolute_url }}"
+                class="block relative aspect-[4/5] md:aspect-[4/3] overflow-hidden bg-slate-100 product-img-wrap">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                    class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-slate-300">
+                    <i class="fas fa-image text-4xl"></i>
+                </div>
+                {% endif %}
+                {% if product.discount_percentage > 0 %}
+                <span
+                    class="absolute top-3 left-3 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full discount-badge shadow-lg">
+                    -{{ product.discount_percentage }}%
+                </span>
+                {% endif %}
+            </a>
+            <div class="p-2 md:p-4 flex flex-col flex-grow">
+                <a href="{{ product.get_absolute_url }}" class="block">
+                    <p class="text-[10px] md:text-xs text-[#b37f00] font-medium uppercase tracking-wide mb-0.5 md:mb-1">
+                        {{ product.get_category_display }}
+                    </p>
+                    <h3
+                        class="text-[11px] md:text-sm font-normal text-slate-700 line-clamp-2 group-hover:text-[#ffb700] transition mb-1 md:mb-2">
+                        {{ product.name }}
+                    </h3>
+                </a>
+                <div class="flex items-center gap-1 md:gap-2 mb-2 md:mb-3">
+                    {% if product.discount_price %}
+                    <span class="text-sm md:text-lg font-bold gold-gradient-text">
+                        Rs. {{ product.discount_price|intcomma }}
+                    </span>
+                    <span class="text-[10px] md:text-sm text-slate-400 line-through">
+                        Rs. {{ product.price|intcomma }}
+                    </span>
+                    {% else %}
+                    <span class="text-sm md:text-lg font-bold gold-gradient-text">
+                        Rs. {{ product.price|intcomma }}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="flex gap-1 md:gap-2 mt-auto">
+                    <button data-product-id="{{ product.id }}" onclick="addToCart(this.dataset.productId, this)"
+                        class="glow-btn flex-1 py-1 md:py-2.5 text-[9px] md:text-sm rounded-lg md:rounded-xl min-w-0 whitespace-nowrap">
+                        <i class="fas fa-shopping-bag mr-0.5 md:mr-1"></i>Add to Cart
+                    </button>
+                    <a href="{{ product.get_absolute_url }}"
+                        class="flex-1 flex items-center justify-center py-1 md:py-2.5 text-[9px] md:text-sm rounded-lg md:rounded-xl font-semibold bg-black text-white hover:bg-gray-800 active:bg-gray-900 transition-colors duration-200 min-w-0 text-center whitespace-nowrap">
+                        <i class="fas fa-bolt mr-0.5 md:mr-1"></i>Shop Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-8 md:hidden">
+        <a href="{% url 'product_list' %}" class="glow-btn inline-block px-8 py-3 rounded-full text-base">
+            View All Products <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Features Banner -->
+<section class="bg-white py-12 border-y border-slate-100">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="group">
+                <div
+                    class="w-14 h-14 bg-[#ffb700]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#ffb700]/20 transition shimmer-border">
+                    <i class="fas fa-truck text-xl text-[#ffb700]"></i>
+                </div>
+                <h4 class="font-semibold text-slate-700 mb-1">Free Delivery</h4>
+                <p class="text-sm text-slate-500">On all orders </p>
+            </div>
+            <div class="group">
+                <div
+                    class="w-14 h-14 bg-[#ffb700]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#ffb700]/20 transition shimmer-border">
+                    <i class="fas fa-shield-alt text-xl text-[#ffb700]"></i>
+                </div>
+                <h4 class="font-semibold text-slate-700 mb-1">Secure Payment</h4>
+                <p class="text-sm text-slate-500">100% secure checkout</p>
+            </div>
+            <div class="group">
+                <div
+                    class="w-14 h-14 bg-[#ffb700]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#ffb700]/20 transition shimmer-border">
+                    <i class="fas fa-undo text-xl text-[#ffb700]"></i>
+                </div>
+                <h4 class="font-semibold text-slate-700 mb-1">Easy Returns</h4>
+                <p class="text-sm text-slate-500">7-day return policy</p>
+                <p class="text-sm text-slate-500">Returnable if no shrink</p>
+            </div>
+            <div class="group">
+                <div
+                    class="w-14 h-14 bg-[#ffb700]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#ffb700]/20 transition shimmer-border">
+                    <i class="fas fa-headset text-xl text-[#ffb700]"></i>
+                </div>
+                <h4 class="font-semibold text-slate-700 mb-1">24/7 Support</h4>
+                <p class="text-sm text-slate-500">Dedicated customer care</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
