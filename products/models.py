@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.conf import settings
+from PIL import Image
+import os
 
 
 class Product(models.Model):
@@ -27,6 +29,7 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        # Auto-generate slug
         if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
@@ -35,7 +38,25 @@ class Product(models.Model):
                 slug = f'{base_slug}-{counter}'
                 counter += 1
             self.slug = slug
+
         super().save(*args, **kwargs)
+
+        # Auto-compress and resize image after saving
+        if self.image:
+            img_path = self.image.path
+            if os.path.exists(img_path):
+                img = Image.open(img_path)
+
+                # Convert RGBA/palette images to RGB (required for JPEG)
+                if img.mode in ('RGBA', 'P', 'LA'):
+                    img = img.convert('RGB')
+
+                # Resize to max 800x800 while keeping aspect ratio
+                max_size = (800, 800)
+                img.thumbnail(max_size, Image.LANCZOS)
+
+                # Save as JPEG at 85% quality (reduces file size by 70-90%)
+                img.save(img_path, format='JPEG', quality=85, optimize=True)
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
