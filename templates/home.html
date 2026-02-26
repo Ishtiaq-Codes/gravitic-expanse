@@ -110,7 +110,8 @@
                     class="block relative aspect-[4/5] md:aspect-[4/3] overflow-hidden bg-slate-100 product-img-wrap">
                     {% if product.image %}
                     <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                        class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                        class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy">
                     {% else %}
                     <div class="w-full h-full flex items-center justify-center text-slate-300">
                         <i class="fas fa-image text-4xl"></i>
@@ -190,7 +191,8 @@
                 class="block relative aspect-[4/5] md:aspect-[4/3] overflow-hidden bg-slate-100 product-img-wrap">
                 {% if product.image %}
                 <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                    class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center text-slate-300">
                     <i class="fas fa-image text-4xl"></i>
