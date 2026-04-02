@@ -198,7 +198,7 @@ sudo systemctl restart nginx
 
 ```bash
 sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d yourdomain.com -d www.domain.com
+sudo certbot --nginx -d domain.com -d www.domain.com
 ```
 
 ## License
