@@ -56,8 +56,7 @@ python manage.py runserver
 ```
 
 Visit:
-- **Store**: http://127.0.0.1:8000/
-- **Admin**: http://127.0.0.1:8000/admin/
+- **Store**: https://www.kamaliakhaddark.com/
 
 ### 5. Add Products
 
@@ -109,7 +108,7 @@ sudo apt install python3-pip python3-venv nginx postgresql postgresql-contrib -y
 
 ```bash
 cd /home/ubuntu
-git clone <your-repo-url> kamalia_store
+git clone <repo-url> kamalia_store
 cd kamalia_store
 python3 -m venv venv
 source venv/bin/activate
